@@ -27,6 +27,9 @@ cellSize = 50
 gridSize = cellSize * 9
 
 # FUNCTIONS
+def loadImage(folder, file_name):
+    return pygame.image.load(os.path.join("../assets", folder, file_name)).convert_alpha()
+
 def loadSound(folder, file_name):
     return pygame.mixer.Sound(os.path.join("../assets", folder, file_name))
 

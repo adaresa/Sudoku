@@ -9,9 +9,13 @@ from achievements import *
 class Menu:
     def __init__(self, language):
         pygame.init()
+        pygame.display.set_caption('Simple Sudoku')
+        self.window = pygame.display.set_mode((WIDTH, HEIGHT))
+        pygame.display.set_icon(loadImage('images', 'icon.png'))
+        
         musicControl()
         self.language = language
-        self.window = pygame.display.set_mode((WIDTH, HEIGHT))
+        
         self.font = pygame.font.Font('../assets/fonts/maldini/MaldiniNormal2.ttf', 70) # title text
         self.font2 = pygame.font.Font('../assets/fonts/maldini/MaldiniNormal2.ttf', 40) # buttons text
         
