@@ -2,8 +2,10 @@ import shelve
 import os
 
 # INITIALIZE
-STATS_DB = shelve.open(os.path.join("../data", "stats"))
-OPTIONS_DB = shelve.open(os.path.join("../data", "options"))
+if not os.path.exists('./data'):
+    os.makedirs('./data')
+STATS_DB = shelve.open(os.path.join("./data", "stats"))
+OPTIONS_DB = shelve.open(os.path.join("./data", "options"))
 
 # FUNCTIONS
 # Options

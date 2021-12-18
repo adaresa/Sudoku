@@ -5,7 +5,6 @@ from database import *
 
 class Button:
     def __init__(self, x, y, width, height, text=None, color=(10, 10, 10), highlightedColor=(30, 28, 30), function = None, params = None):
-        self.font = pygame.font.Font('../assets/fonts/maldini/MaldiniNormal2.ttf', 20) # title text
         self.image = pygame.Surface((width, height))
         self.dims = (width, height)
         self.pos = (x, y)
@@ -86,7 +85,6 @@ class Button:
             
     def drawSlider(self, window, i):
         value = self.value[i]
-        # check if music/volume values are already in database 
         if i == 0:    
             pygame.mixer.music.set_volume(optionsValues(i)/2)
         size = self.image.get_size()
@@ -95,8 +93,8 @@ class Button:
         # slider bg border
         pygame.draw.rect(window, SNOW, self.rect, 2, 12)
         # slider text (0 & 100)
-        text_0 = self.font.render("0", True, SNOW) # (text, antialias, color)
-        text_100 = self.font.render("100", True, SNOW) # (text, antialias, color)
+        text_0 = fontSliderText.render("0", True, SNOW) # (text, antialias, color)
+        text_100 = fontSliderText.render("100", True, SNOW) # (text, antialias, color)
         b = (self.dims[1] - self.text.get_size()[1])
         c = self.pos[0]+self.dims[0]-2
         window.blit(text_0, (self.pos[0]+7, self.pos[1]+b+10))

@@ -8,9 +8,6 @@ class App:
     def __init__(self, language, launchMenu, quitGame, loadingScreen):
         pygame.init()
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
-        self.font = pygame.font.SysFont('arial', 50) # cell numbers
-        self.font2= pygame.font.Font('../assets/fonts/maldini/MaldiniNormal2.ttf', 26) # button text
-        self.font3 = pygame.font.Font('../assets/fonts/maldini/MaldiniNormal2.ttf', 20) # buttons text
         
         self.language = language
         self.saveWin = True
@@ -142,11 +139,11 @@ class App:
                 if self.gridScreen[y][x] is not 0:
                     # text style for generated number
                     if self.gridOriginal[y][x] is not 0:
-                        self.text = self.font.render(str(self.gridScreen[y][x]), True, SNOW) # (text, antialias, color)
+                        self.text = fontCell.render(str(self.gridScreen[y][x]), True, SNOW) # (text, antialias, color)
                         
                     # text style for user inserted number
                     else:
-                        self.text = self.font.render(str(self.gridScreen[y][x]), True, COBALTBLUE) # (text, antialias, color)
+                        self.text = fontCell.render(str(self.gridScreen[y][x]), True, COBALTBLUE) # (text, antialias, color)
                         
                     self.window.blit(self.text, (13 + gridPos[0] + (x * cellSize), 
                                                 gridPos[1] - 3 + (y * cellSize))) # (text, (x,y))
@@ -235,18 +232,18 @@ class App:
     # Load all buttons on screen
     def loadButtons(self):
         string = {'ENG': 'Back', 'EST': 'Tagasi'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.playingButtons.append(Button(gridPos[0], 40, 100, 40, text, function = self.goToMenu))
+        self.playingButtons.append(Button(gridPos[0], 40, 100, 40,
+            renderText(string.get(self.language), fontButtonPlay, SNOW), function = self.goToMenu))
         
         string = {'ENG': 'Solve cell', 'EST': 'Lahenda'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.playingButtons.append(Button(WIDTH/2 - 108, 40, 100, 40, text, function = self.solveCell))
+        self.playingButtons.append(Button(WIDTH/2 - 108, 40, 100, 40,
+            renderText(string.get(self.language), fontButtonPlay, SNOW), function = self.solveCell))
         
         string = {'ENG': 'Mistakes', 'EST': 'Vead'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.playingButtons.append(Button(WIDTH/2 + 8, 40, 100, 40, text, function = self.showMistakes))
+        self.playingButtons.append(Button(WIDTH/2 + 8, 40, 100, 40,
+            renderText(string.get(self.language), fontButtonPlay, SNOW), function = self.showMistakes))
         
         string = {'ENG': 'New', 'EST': 'Uus'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.playingButtons.append(Button(gridPos[0]+gridSize - 100, 40, 100, 40, text, function = self.resetGame))
+        self.playingButtons.append(Button(gridPos[0]+gridSize - 100, 40, 100, 40,
+            renderText(string.get(self.language), fontButtonPlay, SNOW), function = self.resetGame))
 
