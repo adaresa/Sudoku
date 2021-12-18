@@ -22,6 +22,13 @@ class Achievements:
         ###### ACHIEVEMENTS FUNCTIONS ######
     def achievements_events(self):
             for event in pygame.event.get(): 
+                
+                if event.type == pygame.KEYDOWN:
+                    if event.key == 27: # esc
+                        if self.state == "achievements_main":
+                            self.launchMenu()
+                        else:
+                            self.openAchievementsMain()
                         
                 if event.type == pygame.QUIT:
                     self.quitGame()

@@ -51,6 +51,10 @@ class Menu:
 
     def menu_events(self):
         for event in pygame.event.get():
+            
+            if event.type == pygame.KEYDOWN:
+                if event.key == 27: # esc
+                    self.quitGame()
                                 
             if event.type == pygame.QUIT:
                 self.running = False

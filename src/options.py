@@ -28,6 +28,13 @@ class Options:
     ###### OPTIONS FUNCTIONS ######
     def options_events(self):
             for event in pygame.event.get(): 
+                
+                if event.type == pygame.KEYDOWN:
+                    if event.key == 27: # esc
+                        if self.state == "options_main":
+                            self.launchMenu()
+                        else:
+                            self.openMainOptions()
                         
                 if event.type == pygame.QUIT:
                     self.quitGame()

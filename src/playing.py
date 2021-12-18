@@ -37,11 +37,13 @@ class App:
     def playing_events(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                if 0 <= event.key - 48 <= 9:
+                if 0 <= event.key - 48 <= 9: # 0-9
                     if self.selected:
                         number = event.key - 48
                         if self.gridOriginal[self.selected[1]][self.selected[0]] is 0:
                             self.changeNumber(self.selected, number)
+                elif event.key == 27: # esc
+                    self.goToMenu()
                                 
             if event.type == pygame.QUIT:
                 self.quitGame()
