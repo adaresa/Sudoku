@@ -3,3 +3,4 @@
 *.dir
 *.bak
 *.dat
+.vscode/launch.json

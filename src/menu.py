@@ -16,9 +16,6 @@ class Menu:
         musicControl()
         self.language = language
         
-        self.font = pygame.font.Font('../assets/fonts/maldini/MaldiniNormal2.ttf', 70) # title text
-        self.font2 = pygame.font.Font('../assets/fonts/maldini/MaldiniNormal2.ttf', 40) # buttons text
-        
         self.running = True
         self.state = "main_menu"
         self.loadingScreen()
@@ -58,8 +55,6 @@ class Menu:
             if event.type == pygame.QUIT:
                 self.running = False
 
-            #if event.type == pygame.MOUSEMOTION:
-
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button in self.menuButtons:
                     button.activate(self.mousePos)
@@ -80,16 +75,12 @@ class Menu:
     
     def titleText(self):
         # title text
-        text = self.font.render("Simple Sudoku", True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(WIDTH/2, 100))
-        self.window.blit(text, text_rect)
+        drawText("Simple Sudoku", CENTER, 100, fontTitle, SNOW, self.window)
     
     def loadingScreen(self):
         self.window.fill(BG)
         string = {'ENG': 'LOADING ...', 'EST': 'LAADIMINE ...'}
-        text = self.font.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
-        self.window.blit(text, text_rect)
+        drawText(string.get(self.language), CENTER, HEIGHT/2, fontTitle, SNOW, self.window)
         pygame.display.update()
         
     def changeLanguage(self, language):
@@ -113,20 +104,24 @@ class Menu:
         self.running = False
         
     def loadButtons(self):
+        # --- Button sizes ---
         width = 240
-        half_width = width/2
+        half_width = width / 2
+        height = 60
+        
+        # --- Main menu ---
         string = {'ENG': 'PLAY GAME', 'EST': 'MÄNGI'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.menuButtons.append(Button(WIDTH/2 - half_width, 200, width, 60, text, function = self.launchGame))
+        self.menuButtons.append(Button(CENTER - half_width, 200, width, height, 
+            renderText(string.get(self.language), fontButton, SNOW), function = self.launchGame))
         
         string = {'ENG': 'ACHIEVEMENTS', 'EST': 'SAAVUTUSED'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.menuButtons.append(Button(WIDTH/2 - half_width, 290, width, 60, text, function = self.launchAchievements))
+        self.menuButtons.append(Button(CENTER - half_width, 290, width, height,
+            renderText(string.get(self.language), fontButton, SNOW), function = self.launchAchievements))
         
         string = {'ENG': 'OPTIONS', 'EST': 'SEADED'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.menuButtons.append(Button(WIDTH/2 - half_width, 380, width, 60, text, function = self.launchOptions))
+        self.menuButtons.append(Button(CENTER - half_width, 380, width, height,
+            renderText(string.get(self.language), fontButton, SNOW), function = self.launchOptions))
         
         string = {'ENG': 'EXIT GAME', 'EST': 'SULGE MÄNG'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.menuButtons.append(Button(WIDTH/2 - half_width, 470, width, 60, text, function = self.quitGame))
+        self.menuButtons.append(Button(CENTER - half_width, 470, width, height,
+            renderText(string.get(self.language), fontButton, SNOW), function = self.quitGame))

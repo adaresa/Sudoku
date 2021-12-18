@@ -6,10 +6,6 @@ class Achievements:
     def __init__(self, language, launchMenu):
         pygame.init()
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
-        self.font = pygame.font.Font('../assets/fonts/maldini/MaldiniNormal2.ttf', 70) # title text
-        self.font2 = pygame.font.Font('../assets/fonts/maldini/MaldiniNormal2.ttf', 40) # buttons text
-        self.font3 = pygame.font.Font('../assets/fonts/maldini/MaldiniNormal2.ttf', 22) # buttons text
-        self.font4 = pygame.font.Font('../assets/fonts/maldini/MaldiniNormal2.ttf', 26) # buttons text
         
         self.language = language
         self.state = "achievements_main"
@@ -86,78 +82,50 @@ class Achievements:
     def titleAchievements(self):
         # title text
         string = {'ENG': 'Achievements', 'EST': 'Saavutused'}
-        text = self.font.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(WIDTH/2, 100))
-        self.window.blit(text, text_rect)
+        drawText(string.get(self.language), CENTER, 100, fontTitle, SNOW, self.window)
         
     def titleStats(self):
         # title text
         string = {'ENG': 'Stats', 'EST': 'Statistika'}
-        text = self.font.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(WIDTH/2, 100))
-        self.window.blit(text, text_rect)
+        drawText(string.get(self.language), CENTER, 100, fontTitle, SNOW, self.window)
         # stats box
-        pygame.draw.rect(self.window, SNOW, pygame.Rect(WIDTH/2-150, 150, 300, 300), 2, 12)
+        pygame.draw.rect(self.window, SNOW, pygame.Rect(CENTER-150, 150, 300, 300), 2, 12)
         # show stats
         self.statsText()
     
     def statsText(self):
         string = {'ENG': 'GAMES COMPLETED', 'EST': 'MÄNGE    LÕPETATUD'}
-        text = self.font3.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(WIDTH/2, 190))
-        self.window.blit(text, text_rect)
+        drawText(string.get(self.language), CENTER, 190, fontStat, SNOW, self.window)
         
         string = {'ENG': 'Easy', 'EST': 'Kerge'}
-        text = self.font4.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(248, 230))
-        self.window.blit(text, text_rect)
-        text = self.font4.render(str(getStat("wins_easy")), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(370, 230))
-        self.window.blit(text, text_rect)
+        drawText(string.get(self.language), 248, 230, fontButtonPlay, SNOW, self.window)
+        drawText(str(getStat("wins_easy")), 370, 230, fontButtonPlay, SNOW, self.window)    
         
         string = {'ENG': 'Medium', 'EST': 'Keskmine'}
-        text = self.font4.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(262, 280))
-        self.window.blit(text, text_rect)
-        text = self.font4.render(str(getStat("wins_medium")), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(370, 280))
-        self.window.blit(text, text_rect)
+        drawText(string.get(self.language), 262, 280, fontButtonPlay, SNOW, self.window)
+        drawText(str(getStat("wins_medium")), 370, 280, fontButtonPlay, SNOW, self.window)
         
         string = {'ENG': 'Hard', 'EST': 'Raske'}
-        text = self.font4.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(248, 330))
-        self.window.blit(text, text_rect)
-        text = self.font4.render(str(getStat("wins_hard")), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(370, 330))
-        self.window.blit(text, text_rect)
+        drawText(string.get(self.language), 248, 330, fontButtonPlay, SNOW, self.window)
+        drawText(str(getStat("wins_hard")), 370, 330, fontButtonPlay, SNOW, self.window)
         
         total = getStat("wins_easy") + getStat("wins_medium") + getStat("wins_hard")
         string = {'ENG': 'Total' , 'EST': 'Kokku'}
-        text = self.font4.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(248, 380))
-        self.window.blit(text, text_rect)
-        text = self.font4.render(str(total), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(370, 380))
-        self.window.blit(text, text_rect)
+        drawText(string.get(self.language), 248, 380, fontButtonPlay, SNOW, self.window)
+        drawText(str(total), 370, 380, fontButtonPlay, SNOW, self.window)
         
-        text = self.font3.render("1", True, SNOW)
-        text_rect = text.get_rect(center=(WIDTH/2, 430))
-        self.window.blit(text, text_rect)
+        page = 1
+        drawText(str(page), CENTER, 430, fontButtonPlay, SNOW, self.window)
         
-
     def titleTrophies(self):
         # title text
         string = {'ENG': 'Trophies', 'EST': 'Troffeed'}
-        text = self.font.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(WIDTH/2, 100))
-        self.window.blit(text, text_rect)
+        drawText(string.get(self.language), CENTER, 100, fontTitle, SNOW, self.window)
 
     def titleThemes(self):
         # title text
         string = {'ENG': 'Themes', 'EST': 'Teemad'}
-        text = self.font.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        text_rect = text.get_rect(center=(WIDTH/2, 100))
-        self.window.blit(text, text_rect)
+        drawText(string.get(self.language), CENTER, 100, fontTitle, SNOW, self.window)
     
     def openAchievementsMain(self):
         self.state = "achievements_main"
@@ -172,46 +140,50 @@ class Achievements:
         self.state = "achievements_themes"
         
     def loadButtons(self):
-        width = 240
-        half_width = width/2
+        # --- Button sizes ---
+        width = 240 # button width
+        half_width = width / 2
+        height = 60
+        pages_width = 100 # button width of previous/next page
+        pages_height = 40
+        half_pages_width = pages_width / 2
+        
         # --- Achievements buttons ---
         string = {'ENG': 'STATS', 'EST': 'STATISTIKA'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.achievementsButtons.append(Button(WIDTH/2 - half_width, 200, width, 60, text, function = self.openStats))
+        self.achievementsButtons.append(Button(CENTER - half_width, 200, width, height, 
+            renderText(string.get(self.language), fontButton, SNOW), function = self.openStats))
         
         string = {'ENG': 'TROPHIES', 'EST': 'TROFFEED'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.achievementsButtons.append(Button(WIDTH/2 - half_width, 290, width, 60, text, function = self.openTrophies))
+        self.achievementsButtons.append(Button(CENTER - half_width, 290, width, height,
+            renderText(string.get(self.language), fontButton, SNOW), function = self.openTrophies))
         
         string = {'ENG': 'THEMES', 'EST': 'TEEMAD'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.achievementsButtons.append(Button(WIDTH/2 - half_width, 380, width, 60, text, function = self.openThemes))
+        self.achievementsButtons.append(Button(CENTER - half_width, 380, width, height, 
+            renderText(string.get(self.language), fontButton, SNOW), function = self.openThemes))
         
         string = {'ENG': 'BACK', 'EST': 'TAGASI'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.achievementsButtons.append(Button(WIDTH/2 - half_width, 470, width, 60, text, function = self.launchMenu))
+        self.achievementsButtons.append(Button(CENTER - half_width, 470, width, height,
+            renderText(string.get(self.language), fontButton, SNOW), function = self.launchMenu))
         
         # --- Stats buttons ---
-        pages_width = 100
-        half_pages_width = pages_width/2
         string = {'ENG': 'PREVIOUS', 'EST': 'EELMINE'}
-        text = self.font3.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.statsButtons.append(Button(WIDTH/2 - pages_width - half_pages_width, 410, pages_width, 40, text, function = self.openStats))
+        self.statsButtons.append(Button(CENTER - pages_width - half_pages_width, 410, pages_width, pages_height,
+            renderText(string.get(self.language), fontSliderText, SNOW), function = self.openStats))
         
         string = {'ENG': 'NEXT', 'EST': 'JÄRGMINE'}
-        text = self.font3.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.statsButtons.append(Button(WIDTH/2 + half_pages_width, 410, pages_width, 40, text, function = self.openStats))
+        self.statsButtons.append(Button(CENTER + half_pages_width, 410, pages_width, pages_height,
+            renderText(string.get(self.language), fontSliderText, SNOW), function = self.openStats))
         
         string = {'ENG': 'BACK', 'EST': 'TAGASI'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.statsButtons.append(Button(WIDTH/2 - half_width, 470, width, 60, text, function = self.openAchievementsMain))
+        self.statsButtons.append(Button(CENTER - half_width, 470, width, height,
+            renderText(string.get(self.language), fontButton, SNOW), function = self.openAchievementsMain))
         
         # --- Trophies buttons ---
         string = {'ENG': 'BACK', 'EST': 'TAGASI'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.trophiesButtons.append(Button(WIDTH/2 - half_width, 470, width, 60, text, function = self.openAchievementsMain))
+        self.trophiesButtons.append(Button(CENTER - half_width, 470, width, height,
+            renderText(string.get(self.language), fontButton, SNOW), function = self.openAchievementsMain))
         
         # --- Themes buttons ---
         string = {'ENG': 'BACK', 'EST': 'TAGASI'}
-        text = self.font2.render(string.get(self.language), True, SNOW) # (text, antialias, color)
-        self.themesButtons.append(Button(WIDTH/2 - half_width, 470, width, 60, text, function = self.openAchievementsMain))
+        self.themesButtons.append(Button(CENTER - half_width, 470, width, height,
+            renderText(string.get(self.language), fontButton, SNOW), function = self.openAchievementsMain))
