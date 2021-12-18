@@ -58,12 +58,7 @@ class App:
                 if selected:
                     self.selected = selected
                 else:
-                    for i, button in enumerate(self.playingButtons):
-                        if i is 1:
-                            if self.selected:
-                                button.parameter(self.selected)
-                                button.activate(self.mousePos)
-                        else:
+                    for button in self.playingButtons:
                             button.activate(self.mousePos)
                     self.selected = None
                     
@@ -152,13 +147,14 @@ class App:
         playSound(INPUT_SOUND)
         self.gridScreen[pos[1]][pos[0]] = number
         
-    def solveCell(self, pos):
-        self.saveWin = False
-        playSound(MENU_SOUND)
-        if self.gridOriginal[pos[1]][pos[0]] is not self.gridResult[pos[1]][pos[0]]:
-            self.gridScreen[pos[1]][pos[0]] = self.gridResult[pos[1]][pos[0]]
-            self.gridOriginal[pos[1]][pos[0]] = self.gridResult[pos[1]][pos[0]]
-            self.solvedCells.append((pos[1], pos[0]))
+    def solveCell(self):
+        if self.selected:
+            pos = self.selected
+            if self.gridOriginal[pos[1]][pos[0]] is not self.gridResult[pos[1]][pos[0]]:
+                self.saveWin = False
+                self.gridScreen[pos[1]][pos[0]] = self.gridResult[pos[1]][pos[0]]
+                self.gridOriginal[pos[1]][pos[0]] = self.gridResult[pos[1]][pos[0]]
+                self.solvedCells.append((pos[1], pos[0]))
             
     def drawsolvedCells(self, window):
         for cell in self.solvedCells:
@@ -167,7 +163,6 @@ class App:
             
     def showMistakes(self):
         self.saveWin = False
-        playSound(MENU_SOUND)
         self.mistakeCells = []
         for x in range(9):
             for y in range(9):
@@ -215,16 +210,6 @@ class App:
             if inGridHorizontal and inGridVertical:
                 return ((self.mousePos[0] - gridPos[0]) // cellSize, (self.mousePos[1] - gridPos[1]) // cellSize)
             return False
-
-    # Check if mouse on a button
-    def mouseOnButton(self):
-        if self.mousePos:
-            for button in self.playingButtons:
-                inBtnHorizontal = (self.mousePos[0] > button.pos[0] and self.mousePos[0] < button.pos[0]+button.dims[0])
-                inBtnVertical = (self.mousePos[1] > button.pos[1] and self.mousePos[1] < button.pos[1]+button.dims[1])
-                if inBtnHorizontal and inBtnVertical:
-                    return True
-        return False
     
     def goToMenu(self):
         self.launchMenu()
