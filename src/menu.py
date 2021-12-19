@@ -1,23 +1,25 @@
+import sys
 from playing import *
 from options import *
 from achievements import *
 
 class Menu:
-    def __init__(self, language):
+    def __init__(self, theme, language):
         pygame.init()
         pygame.display.set_caption('Simple Sudoku')
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_icon(loadImage('images', 'icon.png'))
         
         musicControl()
+        self.theme = theme
         self.language = language
         
         self.running = True
         self.state = "main_menu"
         self.loadingScreen()
-        self.app = App(self.language, self.launchMenu, self.quitGame, self.loadingScreen)
-        self.options = Options(self.language, self.launchMenu, self.quitGame, self.app.changeDifficulty, self.changeLanguage)
-        self.achievements = Achievements(self.language, self.launchMenu, self.quitGame)
+        self.app = App(self.theme, self.language, self.launchMenu, self.quitGame, self.loadingScreen)
+        self.options = Options(self.theme, self.language, self.launchMenu, self.quitGame, self.app.changeDifficulty, self.changeLanguage)
+        self.achievements = Achievements(self.theme, self.language, self.launchMenu, self.quitGame, self.changeTheme)
         
         self.menuButtons = []
         self.loadButtons()
@@ -65,7 +67,7 @@ class Menu:
             button.update(self.mousePos)
         
     def menu_draw(self):
-        self.window.fill(BG)
+        self.window.fill(BG[self.theme])
         self.titleText()
         for button in self.menuButtons:
             button.draw(self.window)
@@ -75,17 +77,22 @@ class Menu:
     
     def titleText(self):
         # title text
-        drawText("Simple Sudoku", CENTER, 100, fontTitle, SNOW, self.window)
+        drawText("Simple Sudoku", CENTER, 100, fontTitle, TEXT[self.theme], self.window)
     
     def loadingScreen(self):
-        self.window.fill(BG)
+        self.window.fill(BG[self.theme])
         string = {'ENG': 'LOADING ...', 'EST': 'LAADIMINE ...'}
-        drawText(string.get(self.language), CENTER, HEIGHT/2, fontTitle, SNOW, self.window)
+        drawText(string.get(self.language), CENTER, HEIGHT/2, fontTitle, TEXT[self.theme], self.window)
         pygame.display.update()
-        
+    
+    def changeTheme(self, theme):
+        optionsValues("theme", new_value = theme)
+        app = Menu(theme, self.language)
+        app.run()
+    
     def changeLanguage(self, language):
         optionsValues("language", new_value = language)
-        app = Menu(language)
+        app = Menu(self.theme, language)
         app.run()
         
     def launchGame(self): 
@@ -112,17 +119,17 @@ class Menu:
         
         # --- Main menu ---
         string = {'ENG': 'PLAY GAME', 'EST': 'MÄNGI'}
-        self.menuButtons.append(Button(CENTER - half_width, 200, width, height, 
-            renderText(string.get(self.language), fontButton, SNOW), function = self.launchGame))
+        self.menuButtons.append(Button(CENTER - half_width, 200, width, height, self.theme, 
+            renderText(string.get(self.language), fontButton, TEXT[self.theme]), function = self.launchGame))
         
         string = {'ENG': 'ACHIEVEMENTS', 'EST': 'SAAVUTUSED'}
-        self.menuButtons.append(Button(CENTER - half_width, 290, width, height,
-            renderText(string.get(self.language), fontButton, SNOW), function = self.launchAchievements))
+        self.menuButtons.append(Button(CENTER - half_width, 290, width, height, self.theme,
+            renderText(string.get(self.language), fontButton, TEXT[self.theme]), function = self.launchAchievements))
         
         string = {'ENG': 'OPTIONS', 'EST': 'SEADED'}
-        self.menuButtons.append(Button(CENTER - half_width, 380, width, height,
-            renderText(string.get(self.language), fontButton, SNOW), function = self.launchOptions))
+        self.menuButtons.append(Button(CENTER - half_width, 380, width, height, self.theme,
+            renderText(string.get(self.language), fontButton, TEXT[self.theme]), function = self.launchOptions))
         
         string = {'ENG': 'EXIT GAME', 'EST': 'SULGE MÄNG'}
-        self.menuButtons.append(Button(CENTER - half_width, 470, width, height,
-            renderText(string.get(self.language), fontButton, SNOW), function = self.quitGame))
+        self.menuButtons.append(Button(CENTER - half_width, 470, width, height, self.theme,
+            renderText(string.get(self.language), fontButton, TEXT[self.theme]), function = self.quitGame))

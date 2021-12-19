@@ -17,6 +17,10 @@ def optionsValues(option, invert=False, new_value=None):
     except:  # No such option saved in database, so create new value
         if option == "0" or option == "1": # '0' for music slider, '1' for sound effects
             value = 0.5
+        elif option == "theme":
+            value = 0
+        elif option == "language":
+            value = "ENG"
         else:
             value = True
 

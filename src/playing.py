@@ -2,10 +2,11 @@ from buttonClass import *
 from boardClass import *
 
 class App:
-    def __init__(self, language, launchMenu, quitGame, loadingScreen):
+    def __init__(self, theme, language, launchMenu, quitGame, loadingScreen):
         pygame.init()
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
         
+        self.theme = theme
         self.language = language
         self.saveWin = True
         
@@ -67,16 +68,16 @@ class App:
             button.update(self.mousePos)
         
     def playing_draw(self):
-        self.window.fill(BG)
+        self.window.fill(BG[self.theme])
         self.drawsolvedCells(self.window) # green background for solved grid
         if self.mistakeCells:
             self.drawMistakes(self.window)
         for button in self.playingButtons:
             button.draw(self.window)
         if self.hovered:
-            self.drawSelection(self.window, self.hovered, 1)  # 1 -> GRAY
+            self.drawSelection(self.window, self.hovered, 1)
         if self.selected:
-            self.drawSelection(self.window, self.selected, 2) # 2 -> LIGHTGRAY
+            self.drawSelection(self.window, self.selected, 2)
         self.drawGrid(self.window)
         self.drawNumbers()
         
@@ -97,7 +98,7 @@ class App:
             playSound(WIN_SOUND)
             for x in range(9):
                 for y in range(9):
-                    pygame.draw.rect(window, LIMEGREEN, ((
+                    pygame.draw.rect(window, SOLVED[self.theme], ((
                         x * cellSize) + gridPos[0], (y * cellSize) + gridPos[1], cellSize, cellSize))
             self.drawNumbers()
             self.drawGrid(self.window)
@@ -120,10 +121,10 @@ class App:
     # Colors selected and hovered grid
     def drawSelection(self, window, pos, color):
         if color is 2:
-            pygame.draw.rect(window, LIGHTGRAY, ((
+            pygame.draw.rect(window, SELECTED[self.theme], ((
                 pos[0] * cellSize) + gridPos[0], (pos[1] * cellSize) + gridPos[1], cellSize, cellSize))
         elif color is 1:
-            pygame.draw.rect(window, GRAY, ((
+            pygame.draw.rect(window, HOVERED[self.theme], ((
                 pos[0] * cellSize) + gridPos[0], (pos[1] * cellSize) + gridPos[1], cellSize, cellSize))
     
     # Draw numbers on all grids 
@@ -133,11 +134,11 @@ class App:
                 if self.gridScreen[y][x] is not 0:
                     # text style for generated number
                     if self.gridOriginal[y][x] is not 0:
-                        self.text = fontCell.render(str(self.gridScreen[y][x]), True, SNOW) # (text, antialias, color)
+                        self.text = fontCell.render(str(self.gridScreen[y][x]), True, TEXT[self.theme]) # (text, antialias, color)
                         
                     # text style for user inserted number
                     else:
-                        self.text = fontCell.render(str(self.gridScreen[y][x]), True, COBALTBLUE) # (text, antialias, color)
+                        self.text = fontCell.render(str(self.gridScreen[y][x]), True, INSERT_NUMBER[self.theme]) # (text, antialias, color)
                         
                     self.window.blit(self.text, (13 + gridPos[0] + (x * cellSize), 
                                                 gridPos[1] - 3 + (y * cellSize))) # (text, (x,y))
@@ -157,7 +158,7 @@ class App:
             
     def drawsolvedCells(self, window):
         for cell in self.solvedCells:
-            pygame.draw.rect(window, LIMEGREEN, ((
+            pygame.draw.rect(window, SOLVED[self.theme], ((
                 cell[1] * cellSize) + gridPos[0], (cell[0] * cellSize) + gridPos[1], cellSize, cellSize))
             
     def showMistakes(self):
@@ -173,11 +174,11 @@ class App:
     def drawMistakes(self, window):
         if self.mistakeCellsIndex < 1000:
             for cell in self.mistakeCells:
-                pygame.draw.rect(window, CRIMSON, ((
+                pygame.draw.rect(window, MISTAKES[self.theme], ((
                     cell[1] * cellSize) + gridPos[0], (cell[0] * cellSize) + gridPos[1], cellSize, cellSize))
         else:
             for cell in self.mistakeCells:
-                pygame.draw.rect(window, BG, ((
+                pygame.draw.rect(window, BG[self.theme], ((
                         cell[1] * cellSize) + gridPos[0], (cell[0] * cellSize) + gridPos[1], cellSize, cellSize))
             self.mistakeCells = []
             self.mistakeCellsIndex = 0
@@ -186,19 +187,19 @@ class App:
     # Draw the gridlines
     def drawGrid(self, window):
         pygame.draw.rect(
-            window, SNOW, (gridPos[0], gridPos[1], WIDTH-150, HEIGHT-150), 3)
+            window, OUTLINES[self.theme], (gridPos[0], gridPos[1], WIDTH-150, HEIGHT-150), 3)
         for x in range(9):
             if x % 3 == 0:
                 # Fat line vertical
-                pygame.draw.line(window, SNOW, (gridPos[0] + (
+                pygame.draw.line(window, OUTLINES[self.theme], (gridPos[0] + (
                     x * cellSize), gridPos[1]), (gridPos[0] + (x * cellSize), gridPos[1] + 450), 3)
                 # Fat line horizontal
-                pygame.draw.line(window, SNOW, (gridPos[0], gridPos[1] + (
+                pygame.draw.line(window, OUTLINES[self.theme], (gridPos[0], gridPos[1] + (
                     x * cellSize)), (gridPos[0] + 450, gridPos[1] + (x * cellSize)), 3)
             else:
-                pygame.draw.line(window, SNOW, (gridPos[0] + (
+                pygame.draw.line(window, OUTLINES[self.theme], (gridPos[0] + (
                     x * cellSize), gridPos[1]), (gridPos[0] + (x * cellSize), gridPos[1] + 450))
-                pygame.draw.line(window, SNOW, (gridPos[0], gridPos[1] + (
+                pygame.draw.line(window, OUTLINES[self.theme], (gridPos[0], gridPos[1] + (
                     x * cellSize)), (gridPos[0] + 450, gridPos[1] + (x * cellSize)))
 
     # Check if mouse is on grid
@@ -216,18 +217,18 @@ class App:
     # Load all buttons on screen
     def loadButtons(self):
         string = {'ENG': 'Back', 'EST': 'Tagasi'}
-        self.playingButtons.append(Button(gridPos[0], 40, 100, 40,
-            renderText(string.get(self.language), fontButtonPlay, SNOW), function = self.goToMenu))
+        self.playingButtons.append(Button(gridPos[0], 40, 100, 40, self.theme,
+            renderText(string.get(self.language), fontButtonPlay, TEXT[self.theme]), function = self.goToMenu))
         
         string = {'ENG': 'Solve cell', 'EST': 'Lahenda'}
-        self.playingButtons.append(Button(WIDTH/2 - 108, 40, 100, 40,
-            renderText(string.get(self.language), fontButtonPlay, SNOW), function = self.solveCell))
+        self.playingButtons.append(Button(WIDTH/2 - 108, 40, 100, 40, self.theme,
+            renderText(string.get(self.language), fontButtonPlay, TEXT[self.theme]), function = self.solveCell))
         
         string = {'ENG': 'Mistakes', 'EST': 'Vead'}
-        self.playingButtons.append(Button(WIDTH/2 + 8, 40, 100, 40,
-            renderText(string.get(self.language), fontButtonPlay, SNOW), function = self.showMistakes))
+        self.playingButtons.append(Button(WIDTH/2 + 8, 40, 100, 40, self.theme,
+            renderText(string.get(self.language), fontButtonPlay, TEXT[self.theme]), function = self.showMistakes))
         
         string = {'ENG': 'New', 'EST': 'Uus'}
-        self.playingButtons.append(Button(gridPos[0]+gridSize - 100, 40, 100, 40,
-            renderText(string.get(self.language), fontButtonPlay, SNOW), function = self.resetGame))
+        self.playingButtons.append(Button(gridPos[0]+gridSize - 100, 40, 100, 40, self.theme,
+            renderText(string.get(self.language), fontButtonPlay, TEXT[self.theme]), function = self.resetGame))
 
