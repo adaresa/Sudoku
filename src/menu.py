@@ -21,7 +21,7 @@ class Menu:
         self.loadingScreen()
         self.app = App(self.language, self.launchMenu, self.quitGame, self.loadingScreen)
         self.options = Options(self.language, self.launchMenu, self.quitGame, self.app.changeDifficulty, self.changeLanguage)
-        self.achievements = Achievements(self.language, self.launchMenu)
+        self.achievements = Achievements(self.language, self.launchMenu, self.quitGame)
         
         self.menuButtons = []
         self.loadButtons()
@@ -105,6 +105,7 @@ class Menu:
         self.state = "main_menu"
         
     def quitGame(self):
+        closeDB()
         self.running = False
         
     def loadButtons(self):

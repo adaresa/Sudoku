@@ -8,18 +8,19 @@ STATS_DB = shelve.open(os.path.join("./data", "stats"))
 OPTIONS_DB = shelve.open(os.path.join("./data", "options"))
 
 # FUNCTIONS
+
 # Options
 def optionsValues(option, invert=False, new_value=None):
     option = str(option)
     try:
         value = OPTIONS_DB[option]
     except:  # No such option saved in database, so create new value
-        if option == "0" or option == "1":
+        if option == "0" or option == "1": # '0' for music slider, '1' for sound effects
             value = 0.5
         else:
             value = True
 
-    if invert:
+    if invert: # For toggling setting
         value = not value
         OPTIONS_DB[option] = value
     elif new_value is not None:
@@ -28,7 +29,7 @@ def optionsValues(option, invert=False, new_value=None):
     else:  # if value wasn't changed, returns it
         return value
 
-# Stats
+# return requested stat
 def getStat(stat):
     try:
         # If database already has high_score entry
@@ -37,7 +38,7 @@ def getStat(stat):
         value = 0
     return value
 
-
+# add stat to database
 def saveStat(stat, new_value, compare=0):
     if compare:
         # Replace stat with value if new value is higher

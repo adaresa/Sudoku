@@ -3,7 +3,7 @@ from settings import *
 from buttonClass import *
 
 class Achievements:
-    def __init__(self, language, launchMenu):
+    def __init__(self, language, launchMenu, quitGame):
         pygame.init()
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
         
@@ -11,6 +11,7 @@ class Achievements:
         self.state = "achievements_main"
         
         self.launchMenu = launchMenu
+        self.quitGame = quitGame
         
         self.achievementsButtons = []
         self.statsButtons = []

@@ -28,12 +28,12 @@ cellSize = 50
 gridSize = cellSize * 9
 
 # FONTS
-fontStat = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 22) # stat text
-fontButton = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 40) # buttons text
-fontButtonPlay = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 26) # button text in playing
-fontSliderText = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 20) # text in slider
 fontTitle = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 70) # title text
 fontCell = pygame.font.SysFont('arial', 50) # cell numbers
+fontButton = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 40) # buttons text
+fontButtonPlay = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 26) # button text in playing
+fontStat = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 22) # stat text
+fontSliderText = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 20) # text in slider
 
 # FUNCTIONS
 def loadImage(folder, file_name):
