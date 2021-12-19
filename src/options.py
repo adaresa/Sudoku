@@ -1,5 +1,3 @@
-import pygame
-from settings import *
 from buttonClass import *
 
 class Options:

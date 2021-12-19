@@ -1,7 +1,4 @@
-import pygame
-import PySimpleGUI as sg
 from settings import *
-from database import *
 
 class Button:
     def __init__(self, x, y, width, height, text=None, color=(10, 10, 10), highlightedColor=(30, 28, 30), function = None, params = None):

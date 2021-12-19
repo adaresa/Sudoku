@@ -1,5 +1,4 @@
 from menu import *
-from settings import *
 
 if __name__ == "__main__":
     lang = optionsValues("language")

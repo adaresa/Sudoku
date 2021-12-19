@@ -1,7 +1,3 @@
-import sys
-import pygame
-from settings import *
-from buttonClass import *
 from playing import *
 from options import *
 from achievements import *

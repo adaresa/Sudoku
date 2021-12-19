@@ -1,6 +1,3 @@
-import pygame
-from copy import deepcopy
-from settings import *
 from buttonClass import *
 from boardClass import *
 
@@ -15,7 +12,7 @@ class App:
         self.grid = Board()
         self.difficulty = 0
         self.gridScreen, self.gridResult = self.grid.generateQuestionBoardCode(self.difficulty) # 0-2 difficulty
-        self.gridOriginal = deepcopy(self.gridScreen) # original grid to track which values are generated or player inserted
+        self.gridOriginal = copy.deepcopy(self.gridScreen) # original grid to track which values are generated or player inserted
         
         self.solvedCells = []
         self.mistakeCells = []
@@ -111,7 +108,7 @@ class App:
     def resetGame(self):
         self.loadingScreen()
         self.gridScreen, self.gridResult = self.grid.generateQuestionBoardCode(self.difficulty) # 0-2 difficulty
-        self.gridOriginal = deepcopy(self.gridScreen) # original grid to track which values are generated or player inserted
+        self.gridOriginal = copy.deepcopy(self.gridScreen) # original grid to track which values are generated or player inserted
         self.solvedCells = []
         self.selected = None
         self.saveWin = True
