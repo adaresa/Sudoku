@@ -1,18 +1,14 @@
-import pygame
-import PySimpleGUI as sg
 from settings import *
-from database import *
 
 class Button:
-    def __init__(self, x, y, width, height, text=None, color=(10, 10, 10), highlightedColor=(30, 28, 30), function = None, params = None):
+    def __init__(self, x, y, width, height, theme, text=None, function = None, params = None):
         self.image = pygame.Surface((width, height))
         self.dims = (width, height)
         self.pos = (x, y)
         self.rect = self.image.get_rect()
         self.rect.topleft = self.pos
         self.text = text
-        self.color = color
-        self.highlightedColor = highlightedColor
+        self.theme = theme
         self.function = function
         self.params = params
         self.highlighted = False
@@ -74,9 +70,9 @@ class Button:
     def draw(self, window):
         # button bg
         size = self.image.get_size()
-        pygame.draw.rect(window, (self.highlightedColor if self.highlighted else self.color), (self.pos[0], self.pos[1], *size), border_radius = 3)
+        pygame.draw.rect(window, (BUTTON_HIGHLIGHT[self.theme] if self.highlighted else BUTTON[self.theme]), (self.pos[0], self.pos[1], *size), border_radius = 3)
         # button border
-        pygame.draw.rect(window, SNOW, self.rect, 2, 3)
+        pygame.draw.rect(window, OUTLINES[self.theme], self.rect, 2, 3)
         # button text
         if self.text:
             a = (self.dims[0] - self.text.get_size()[0]) / 2
@@ -89,12 +85,12 @@ class Button:
             pygame.mixer.music.set_volume(optionsValues(i)/2)
         size = self.image.get_size()
         # slider bg
-        pygame.draw.rect(window, self.color, (self.pos[0], self.pos[1], *size), border_radius = 12)
+        pygame.draw.rect(window, BUTTON[self.theme], (self.pos[0], self.pos[1], *size), border_radius = 12)
         # slider bg border
-        pygame.draw.rect(window, SNOW, self.rect, 2, 12)
+        pygame.draw.rect(window, OUTLINES[self.theme], self.rect, 2, 12)
         # slider text (0 & 100)
-        text_0 = fontSliderText.render("0", True, SNOW) # (text, antialias, color)
-        text_100 = fontSliderText.render("100", True, SNOW) # (text, antialias, color)
+        text_0 = fontSliderText.render("0", True, TEXT[self.theme]) # (text, antialias, color)
+        text_100 = fontSliderText.render("100", True, TEXT[self.theme]) # (text, antialias, color)
         b = (self.dims[1] - self.text.get_size()[1])
         c = self.pos[0]+self.dims[0]-2
         window.blit(text_0, (self.pos[0]+7, self.pos[1]+b+10))
@@ -110,7 +106,7 @@ class Button:
             conversionOutput = 0
         # slider selector
         self.rect_selector = pygame.Rect(self.rect[0]+conversionOutput, self.rect[1]-5, width, self.dims[1]+10)
-        pygame.draw.rect(window, (SNOW if self.highlighted else LIGHTGRAY), self.rect_selector, border_radius= 16)
+        pygame.draw.rect(window, (OUTLINES[self.theme] if self.highlighted else LIGHTGRAY), self.rect_selector, border_radius= 16)
         optionsValues(i, new_value = value)
         
         

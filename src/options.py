@@ -1,12 +1,11 @@
-import pygame
-from settings import *
 from buttonClass import *
 
 class Options:
-    def __init__(self, language, launchMenu, quitGame, changeDifficulty, changeLanguage):
+    def __init__(self, theme, language, launchMenu, quitGame, changeDifficulty, changeLanguage):
         pygame.init()
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
         
+        self.theme = theme
         self.language = language
         self.state = "options_main"
         
@@ -28,6 +27,13 @@ class Options:
     ###### OPTIONS FUNCTIONS ######
     def options_events(self):
             for event in pygame.event.get(): 
+                
+                if event.type == pygame.KEYDOWN:
+                    if event.key == 27: # esc
+                        if self.state == "options_main":
+                            self.launchMenu()
+                        else:
+                            self.openMainOptions()
                         
                 if event.type == pygame.QUIT:
                     self.quitGame()
@@ -84,7 +90,7 @@ class Options:
             
         
     def options_draw(self):
-        self.window.fill(BG)
+        self.window.fill(BG[self.theme])
         if self.state == "options_main":
             self.titleOptions()
             for button in self.optionsButtons:
@@ -112,29 +118,23 @@ class Options:
     
     def titleOptions(self):
         # title text
-        string = {'ENG': 'Options', 'EST': 'Seaded'}
-        drawText(string.get(self.language), CENTER, 100, fontTitle, SNOW, self.window)        
+        drawText(getText(self.language, 'menu_options_title'), CENTER, 100, fontTitle, TEXT[self.theme], self.window)        
         
     def titleDifficulty(self):
         # title text
-        string = {'ENG': 'Difficulty', 'EST': 'Raskusaste'}
-        drawText(string.get(self.language), CENTER, 100, fontTitle, SNOW, self.window)   
+        drawText(getText(self.language, 'menu_difficulty_title'), CENTER, 100, fontTitle, TEXT[self.theme], self.window)   
         
     def titleSound(self):
         # title text
-        string = {'ENG': 'Sound', 'EST': 'Heli'}
-        drawText(string.get(self.language), CENTER, 100, fontTitle, SNOW, self.window)   
+        drawText(getText(self.language, 'menu_sound_title'), CENTER, 100, fontTitle, TEXT[self.theme], self.window)   
         # music volume slider text
-        string = {'ENG': 'Music', 'EST': 'Muusika'}
-        drawText(string.get(self.language), CENTER, 190, fontButtonPlay, SNOW, self.window)   
+        drawText(getText(self.language, 'menu_sound_1'), CENTER, 190, fontButtonPlay, TEXT[self.theme], self.window)   
         # sound effects volume slider text
-        string = {'ENG': 'Sound effects', 'EST': 'Heliefektid'}
-        drawText(string.get(self.language), CENTER, 325, fontButtonPlay, SNOW, self.window)   
+        drawText(getText(self.language, 'menu_sound_2'), CENTER, 325, fontButtonPlay, TEXT[self.theme], self.window)   
         
     def titleLanguage(self):
         # title text
-        string = {'ENG': 'Language', 'EST': 'Keel'}
-        drawText(string.get(self.language), CENTER, 100, fontTitle, SNOW, self.window)   
+        drawText(getText(self.language, 'menu_language_title'), CENTER, 100, fontTitle, TEXT[self.theme], self.window)   
     
     def openMainOptions(self):
         self.state = "options_main"
@@ -152,61 +152,49 @@ class Options:
         width = 240
         half_width = width / 2
         # --- Options buttons ---
-        string = {'ENG': 'DIFFICULTY', 'EST': 'RASKUSASTE'}
-        self.optionsButtons.append(Button(WIDTH/2 - half_width, 200, width, 60,
-            renderText(string.get(self.language), fontButton, SNOW), function = self.openDifficulty))
+        self.optionsButtons.append(Button(WIDTH/2 - half_width, 200, width, 60, self.theme,
+            renderText(getText(self.language, 'menu_options_1'), fontButton, TEXT[self.theme]), function = self.openDifficulty))
+
+        self.optionsButtons.append(Button(WIDTH/2 - half_width, 290, width, 60, self.theme,
+            renderText(getText(self.language, 'menu_options_2'), fontButton, TEXT[self.theme]), function = self.openSound))
         
-        string = {'ENG': 'SOUND', 'EST': 'HELI'}
-        self.optionsButtons.append(Button(WIDTH/2 - half_width, 290, width, 60,
-            renderText(string.get(self.language), fontButton, SNOW), function = self.openSound))
+        self.optionsButtons.append(Button(WIDTH/2 - half_width, 380, width, 60, self.theme,
+            renderText(getText(self.language, 'menu_options_3'), fontButton, TEXT[self.theme]), function = self.openLanguage))
         
-        string = {'ENG': 'LANGUAGE', 'EST': 'KEEL'}
-        self.optionsButtons.append(Button(WIDTH/2 - half_width, 380, width, 60,
-            renderText(string.get(self.language), fontButton, SNOW), function = self.openLanguage))
-        
-        string = {'ENG': 'BACK', 'EST': 'TAGASI'}
-        self.optionsButtons.append(Button(WIDTH/2 - half_width, 470, width, 60,
-            renderText(string.get(self.language), fontButton, SNOW), function = self.launchMenu))
+        self.optionsButtons.append(Button(WIDTH/2 - half_width, 470, width, 60, self.theme,
+            renderText(getText(self.language, 'back_button'), fontButton, TEXT[self.theme]), function = self.launchMenu))
         
         # --- Difficulty buttons ---
-        string = {'ENG': 'EASY', 'EST': 'KERGE'}
-        self.difficultyButtons.append(Button(WIDTH/2 - half_width, 200, width, 60,
-            renderText(string.get(self.language), fontButton, SNOW), function = self.changeDifficulty, params = 0))
+        self.difficultyButtons.append(Button(WIDTH/2 - half_width, 200, width, 60, self.theme,
+            renderText(getText(self.language, 'menu_difficulty_1'), fontButton, TEXT[self.theme]), function = self.changeDifficulty, params = 0))
         
-        string = {'ENG': 'MEDIUM', 'EST': 'KESKMINE'}
-        self.difficultyButtons.append(Button(WIDTH/2 - half_width, 290, width, 60,
-            renderText(string.get(self.language), fontButton, SNOW), function = self.changeDifficulty, params = 1))
+        self.difficultyButtons.append(Button(WIDTH/2 - half_width, 290, width, 60, self.theme,
+            renderText(getText(self.language, 'menu_difficulty_2'), fontButton, TEXT[self.theme]), function = self.changeDifficulty, params = 1))
         
-        string = {'ENG': 'HARD', 'EST': 'RASKE'}
-        self.difficultyButtons.append(Button(WIDTH/2 - half_width, 380, width, 60,
-            renderText(string.get(self.language), fontButton, SNOW), function = self.changeDifficulty, params = 2))
+        self.difficultyButtons.append(Button(WIDTH/2 - half_width, 380, width, 60, self.theme,
+            renderText(getText(self.language, 'menu_difficulty_3'), fontButton, TEXT[self.theme]), function = self.changeDifficulty, params = 2))
         
-        string = {'ENG': 'BACK', 'EST': 'TAGASI'}
-        self.difficultyButtons.append(Button(WIDTH/2 - half_width, 470, width, 60,
-            renderText(string.get(self.language), fontButton, SNOW), function = self.openMainOptions))
+        self.difficultyButtons.append(Button(WIDTH/2 - half_width, 470, width, 60, self.theme,
+            renderText(getText(self.language, 'back_button'), fontButton, TEXT[self.theme]), function = self.openMainOptions))
         
         # --- Sound buttons ---
-        string = {'ENG': 'MUSIC', 'EST': 'MUUSIKA'}
-        self.soundSliders.append(Button(WIDTH/2 - half_width, 210, width, 40,
-            renderText(string.get(self.language), fontButton, SNOW)))
+        self.soundSliders.append(Button(WIDTH/2 - half_width, 210, width, 40, self.theme,
+            renderText(getText(self.language, 'menu_sound_1'), fontButton, TEXT[self.theme])))
         
-        string = {'ENG': 'SOUND', 'EST': 'HELI'}
-        self.soundSliders.append(Button(WIDTH/2 - half_width, 345, width, 40,
-            renderText(string.get(self.language), fontButton, SNOW)))
+        self.soundSliders.append(Button(WIDTH/2 - half_width, 345, width, 40, self.theme,
+            renderText(getText(self.language, 'menu_sound_2'), fontButton, TEXT[self.theme])))
         
-        string = {'ENG': 'BACK', 'EST': 'TAGASI'}
-        self.soundButtons.append(Button(WIDTH/2 - half_width, 470, width, 60,
-            renderText(string.get(self.language), fontButton, SNOW), function = self.openMainOptions))
+        self.soundButtons.append(Button(WIDTH/2 - half_width, 470, width, 60, self.theme,
+            renderText(getText(self.language, 'back_button'), fontButton, TEXT[self.theme]), function = self.openMainOptions))
         
         # --- Language buttons ---
-        self.languageButtons.append(Button(WIDTH/2 - half_width, 200, width, 60,
-            renderText("ENGLISH", fontButton, SNOW), function = self.changeLanguage, params = "ENG"))
+        self.languageButtons.append(Button(WIDTH/2 - half_width, 200, width, 60, self.theme,
+            renderText("ENGLISH", fontButton, TEXT[self.theme]), function = self.changeLanguage, params = "ENG"))
         
-        self.languageButtons.append(Button(WIDTH/2 - half_width, 290, width, 60,
-            renderText("EESTI", fontButton, SNOW), function = self.changeLanguage, params = "EST"))
+        self.languageButtons.append(Button(WIDTH/2 - half_width, 290, width, 60, self.theme,
+            renderText("EESTI", fontButton, TEXT[self.theme]), function = self.changeLanguage, params = "EST"))
         
-        string = {'ENG': 'BACK', 'EST': 'TAGASI'}
-        self.languageButtons.append(Button(WIDTH/2 - half_width, 380, width, 60,
-            renderText(string.get(self.language), fontButton, SNOW), function = self.openMainOptions))
+        self.languageButtons.append(Button(WIDTH/2 - half_width, 380, width, 60, self.theme,
+            renderText(getText(self.language, 'back_button'), fontButton, TEXT[self.theme]), function = self.openMainOptions))
         
         

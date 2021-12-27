@@ -1,10 +1,7 @@
 from menu import *
-from settings import *
 
 if __name__ == "__main__":
+    theme = optionsValues("theme")
     lang = optionsValues("language")
-    if lang != "ENG" and lang != "EST":
-        optionsValues("language", new_value="ENG")
-        lang = optionsValues("language")
-    app = Menu(lang)
+    app = Menu(theme, lang)
     app.run()
