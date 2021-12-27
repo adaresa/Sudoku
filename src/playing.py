@@ -81,7 +81,7 @@ class App:
             self.drawSelection(self.window, self.selected, 2)
         self.drawGrid(self.window)
         self.drawNumbers()
-        self.drawTime()
+        self.drawInfo()
         
         self.winCheck(self.window)
         pygame.display.update()
@@ -97,14 +97,31 @@ class App:
             
 
 ###### HELPER FUNCTIONS ######
-    def drawTime(self):
-        drawText(getTime(self.timer), CENTER+(3*cellSize), 568, fontStatValue, TEXT[self.theme], self.window)
+    # draw self.saveWin, self.difficulty, self.timer under board
+    def drawInfo(self):
+        # 4 vertical lines
+        pygame.draw.line(self.window, OUTLINES_TIMER[self.theme], (gridPos[0] + (
+                    0 * cellSize), gridPos[1]+gridSize), (gridPos[0] + (0 * cellSize), gridPos[1]+gridSize + 35), 3)
+        pygame.draw.line(self.window, OUTLINES_TIMER[self.theme], (gridPos[0] + (
+                    3 * cellSize), gridPos[1]+gridSize), (gridPos[0] + (3 * cellSize), gridPos[1]+gridSize + 35), 3)
         pygame.draw.line(self.window, OUTLINES_TIMER[self.theme], (gridPos[0] + (
                     6 * cellSize), gridPos[1]+gridSize), (gridPos[0] + (6 * cellSize), gridPos[1]+gridSize + 35), 3)
         pygame.draw.line(self.window, OUTLINES_TIMER[self.theme], (gridPos[0] + (
                     9 * cellSize)-1, gridPos[1]+gridSize), (gridPos[0]-1 + (9 * cellSize), gridPos[1]+gridSize + 35), 3)
-        pygame.draw.line(self.window, OUTLINES_TIMER[self.theme], (gridPos[0] + (
-                    6*cellSize), gridPos[1]+gridSize + 35), (gridPos[0] + (9*cellSize), gridPos[1] + gridSize + 35), 3)
+        # 1 horizontal line
+        pygame.draw.line(self.window, OUTLINES_TIMER[self.theme], (gridPos[0], 
+                    gridPos[1]+gridSize + 35), (gridPos[0] + (9*cellSize), gridPos[1] + gridSize + 35), 3)
+
+        to_save = [getText(self.language, 'game_savable_yes'), SAVABLE[0]] if self.saveWin == True else [getText(self.language, 'game_savable_no'), SAVABLE[1]]
+        difficulty = [
+            [getText(self.language, 'stat_1_1'), DIFFICULTY[0]], 
+            [getText(self.language, 'stat_1_2'), DIFFICULTY[1]],
+            [getText(self.language, 'stat_1_3'), DIFFICULTY[2]]
+            ]
+
+        drawText(to_save[0], CENTER-(3*cellSize), 568, fontButtonPlay, to_save[1], self.window)
+        drawText(difficulty[self.difficulty][0], CENTER, 568, fontButtonPlay, difficulty[self.difficulty][1], self.window)
+        drawText(getTime(self.timer), CENTER+(3*cellSize), 568, fontStatValue, TEXT[self.theme], self.window)
 
     def winCheck(self, window):
         if self.gridScreen == self.gridResult:

@@ -33,14 +33,17 @@ ALMOST_BLACK = (10, 10, 10)
 BG =                [DARKGRAY,      LINEN,          DARKGRAY]       # Background
 TEXT =              [LINEN,         ALMOST_BLACK,   CYAN]           # Text
 OUTLINES =          [LINEN,         ALMOST_BLACK,   GREEN]          # Outlines (buttons&grid)
-OUTLINES_TIMER =    [SEASHELL,      DARKGRAY,       GREENLIGHTER]          # Outlines (buttons&grid)
+OUTLINES_TIMER =    [SEASHELL,      DARKGRAY,       GREENLIGHTER]   # Outlines (buttons&grid)
 BUTTON =            [ALMOST_BLACK,  SEASHELL,       ALMOST_BLACK]   # Button body
 BUTTON_HIGHLIGHT =  [DARKGRAY,      ROSE,           DARKGRAY]       # Button body on hover
-HOVERED =           [GRAY,          ROSE,       GRAY]           # Cell on hover
-SELECTED =          [LIGHTGRAY,     DARKROSE,      LIGHTGRAY]      # Cell on select
+HOVERED =           [GRAY,          ROSE,           GRAY]           # Cell on hover
+SELECTED =          [LIGHTGRAY,     DARKROSE,       LIGHTGRAY]      # Cell on select
 INSERT_NUMBER =     [COBALTBLUE,    COBALTBLUE,     COBALTBLUE]     # Inserted cell number
 SOLVED =            [LIMEGREEN,     LIMEGREEN,      LIMEGREEN]      # Solved cell background (solve button & win)
 MISTAKES =          [CRIMSON,       CRIMSON,        CRIMSON]        # Mistake cells background (mistake button)
+# GAME INFO         
+DIFFICULTY =        [GREEN,         CYAN,           CRIMSON]
+SAVABLE =           [GREEN,         CRIMSON]
 
 # POSITIONS AND SIZES
 gridPos = (75, 100)

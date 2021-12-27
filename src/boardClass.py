@@ -174,11 +174,11 @@ class Board:
         self.board = copy.deepcopy(fullBoard)
         
         if difficulty == 0:
-            _squares_to_remove = 26
+            _squares_to_remove = 30
         elif difficulty == 1:
-            _squares_to_remove = 36
+            _squares_to_remove = 40
         elif difficulty == 2:
-            _squares_to_remove = 46
+            _squares_to_remove = 50
         else:
             return
         
