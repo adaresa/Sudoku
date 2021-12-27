@@ -1,6 +1,7 @@
 import pygame
 import os
 from database import *
+from languages import *
 
 # INITIALIZE
 pygame.init()
@@ -14,9 +15,11 @@ HEIGHT = 600
 LINEN = (250,240,230)
 SEASHELL = (255,245,238)
 ROSE = (255,228,225)
+DARKROSE = (245, 200, 215)
 LIGHTERGRAY = (200, 200, 200)
 CYAN = (0, 248, 230)
 GREEN = (10, 200, 100)
+GREENLIGHTER = (10, 170, 100)
 CRIMSON = (220,20,60)
 COBALTBLUE = (0, 71, 171)
 LIGHTGRAY = (100, 100, 100)
@@ -29,10 +32,11 @@ ALMOST_BLACK = (10, 10, 10)
 BG =                [DARKGRAY,      LINEN,          DARKGRAY]       # Background
 TEXT =              [LINEN,         ALMOST_BLACK,   CYAN]           # Text
 OUTLINES =          [LINEN,         ALMOST_BLACK,   GREEN]          # Outlines (buttons&grid)
+OUTLINES_TIMER =    [SEASHELL,      DARKGRAY,       GREENLIGHTER]          # Outlines (buttons&grid)
 BUTTON =            [ALMOST_BLACK,  SEASHELL,       ALMOST_BLACK]   # Button body
 BUTTON_HIGHLIGHT =  [DARKGRAY,      ROSE,           DARKGRAY]       # Button body on hover
-HOVERED =           [GRAY,          LIGHTERGRAY,    GRAY]           # Cell on hover
-SELECTED =          [LIGHTGRAY,     LIGHTGRAY,      LIGHTGRAY]      # Cell on select
+HOVERED =           [GRAY,          ROSE,       GRAY]           # Cell on hover
+SELECTED =          [LIGHTGRAY,     DARKROSE,      LIGHTGRAY]      # Cell on select
 INSERT_NUMBER =     [COBALTBLUE,    COBALTBLUE,     COBALTBLUE]     # Inserted cell number
 SOLVED =            [LIMEGREEN,     LIMEGREEN,      LIMEGREEN]      # Solved cell background (solve button & win)
 MISTAKES =          [CRIMSON,       CRIMSON,        CRIMSON]        # Mistake cells background (mistake button)
@@ -47,7 +51,8 @@ fontTitle = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 70) # 
 fontCell = pygame.font.SysFont('arial', 50) # cell numbers
 fontButton = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 40) # buttons text
 fontButtonPlay = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 26) # button text in playing
-fontStat = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 22) # stat text
+fontStatValue = pygame.font.SysFont('arial', 26) # button text in playing
+fontStat = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 22) # stat title
 fontSliderText = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 20) # text in slider
 
 # FUNCTIONS
@@ -75,9 +80,11 @@ def drawText(string, x, y, font, color, window):
     rect = text_rendered.get_rect(center=(x, y))
     window.blit(text_rendered, rect)
 
-    
+def getText(language, case):
+    language_index = 0 if language == "ENG" else 1
+    return texts[case][language_index]
+
 # SOUNDS
 MENU_SOUND = loadSound("sounds", "menu.mp3")
 INPUT_SOUND = loadSound("sounds", "input.mp3")
 WIN_SOUND = loadSound("sounds", "win.mp3")
-

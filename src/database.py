@@ -44,10 +44,14 @@ def getStat(stat):
 
 # add stat to database
 def saveStat(stat, new_value, compare=0):
-    if compare:
+    if compare != 0:
         # Replace stat with value if new value is higher
-        if new_value > getStat(stat):
-            STATS_DB[stat] = new_value
+        if compare > 0:
+            if new_value > getStat(stat):
+                STATS_DB[stat] = new_value
+        else:
+            if getStat(stat) == 0 or new_value < getStat(stat):
+                STATS_DB[stat] = new_value
     else:
         # Add new value to old stat value
         STATS_DB[stat] = getStat(stat) + new_value

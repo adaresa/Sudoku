@@ -1,3 +1,4 @@
+import time
 from buttonClass import *
 from boardClass import *
 
@@ -8,6 +9,8 @@ class App:
         
         self.theme = theme
         self.language = language
+        self.counterStart = None
+        self.timer = 0
         self.saveWin = True
         
         self.grid = Board()
@@ -38,7 +41,7 @@ class App:
                 if 0 <= event.key - 48 <= 9: # 0-9
                     if self.selected:
                         number = event.key - 48
-                        if self.gridOriginal[self.selected[1]][self.selected[0]] is 0:
+                        if self.gridOriginal[self.selected[1]][self.selected[0]] == 0:
                             self.changeNumber(self.selected, number)
                 elif event.key == 27: # esc
                     self.goToMenu()
@@ -80,21 +83,44 @@ class App:
             self.drawSelection(self.window, self.selected, 2)
         self.drawGrid(self.window)
         self.drawNumbers()
+        self.drawTime()
         
         self.winCheck(self.window)
         pygame.display.update()
+    
+    def count_time(self):
+        if self.counterStart is None:
+            self.counterStart = time.perf_counter()
+        else:
+            elapsed = time.perf_counter() - self.counterStart
+            if elapsed >= 1:
+                self.timer += 1
+                self.counterStart = None
+            
 
 ###### HELPER FUNCTIONS ######
+    def drawTime(self):
+        drawText(time.strftime("%M:%S", time.gmtime(self.timer)), CENTER+(3*cellSize), 568, fontStatValue, TEXT[self.theme], self.window)
+        pygame.draw.line(self.window, OUTLINES_TIMER[self.theme], (gridPos[0] + (
+                    6 * cellSize), gridPos[1]+gridSize), (gridPos[0] + (6 * cellSize), gridPos[1]+gridSize + 35), 3)
+        pygame.draw.line(self.window, OUTLINES_TIMER[self.theme], (gridPos[0] + (
+                    9 * cellSize)-1, gridPos[1]+gridSize), (gridPos[0]-1 + (9 * cellSize), gridPos[1]+gridSize + 35), 3)
+        pygame.draw.line(self.window, OUTLINES_TIMER[self.theme], (gridPos[0] + (
+                    6*cellSize), gridPos[1]+gridSize + 35), (gridPos[0] + (9*cellSize), gridPos[1] + gridSize + 35), 3)
 
     def winCheck(self, window):
         if self.gridScreen == self.gridResult:
             if self.saveWin:
                 if self.difficulty == 0:
                     saveStat("wins_easy", 1)
+                    saveStat("time_easy", self.timer, compare=-1)
                 elif self.difficulty == 1:
                     saveStat("wins_medium", 1)
+                    saveStat("time_medium", self.timer, compare=-1)
                 elif self.difficulty == 2:
                     saveStat("wins_hard", 1)
+                    saveStat("time_hard", self.timer, compare=-1)
+                saveStat("time_total", self.timer)
             playSound(WIN_SOUND)
             for x in range(9):
                 for y in range(9):
@@ -113,6 +139,8 @@ class App:
         self.solvedCells = []
         self.selected = None
         self.saveWin = True
+        self.timer = 0
+        self.counterStart = None
         
     def changeDifficulty(self, difficulty):
         self.difficulty = difficulty
@@ -120,10 +148,10 @@ class App:
 
     # Colors selected and hovered grid
     def drawSelection(self, window, pos, color):
-        if color is 2:
+        if color == 2:
             pygame.draw.rect(window, SELECTED[self.theme], ((
                 pos[0] * cellSize) + gridPos[0], (pos[1] * cellSize) + gridPos[1], cellSize, cellSize))
-        elif color is 1:
+        elif color == 1:
             pygame.draw.rect(window, HOVERED[self.theme], ((
                 pos[0] * cellSize) + gridPos[0], (pos[1] * cellSize) + gridPos[1], cellSize, cellSize))
     
@@ -131,9 +159,9 @@ class App:
     def drawNumbers(self):
         for x in range(9):
             for y in range(9):
-                if self.gridScreen[y][x] is not 0:
+                if self.gridScreen[y][x] != 0:
                     # text style for generated number
-                    if self.gridOriginal[y][x] is not 0:
+                    if self.gridOriginal[y][x] != 0:
                         self.text = fontCell.render(str(self.gridScreen[y][x]), True, TEXT[self.theme]) # (text, antialias, color)
                         
                     # text style for user inserted number
@@ -216,19 +244,15 @@ class App:
     
     # Load all buttons on screen
     def loadButtons(self):
-        string = {'ENG': 'Back', 'EST': 'Tagasi'}
         self.playingButtons.append(Button(gridPos[0], 40, 100, 40, self.theme,
-            renderText(string.get(self.language), fontButtonPlay, TEXT[self.theme]), function = self.goToMenu))
+            renderText(getText(self.language, 'back_button_lower'), fontButtonPlay, TEXT[self.theme]), function = self.goToMenu))
         
-        string = {'ENG': 'Solve cell', 'EST': 'Lahenda'}
         self.playingButtons.append(Button(WIDTH/2 - 108, 40, 100, 40, self.theme,
-            renderText(string.get(self.language), fontButtonPlay, TEXT[self.theme]), function = self.solveCell))
+            renderText(getText(self.language, 'game_solve'), fontButtonPlay, TEXT[self.theme]), function = self.solveCell))
         
-        string = {'ENG': 'Mistakes', 'EST': 'Vead'}
         self.playingButtons.append(Button(WIDTH/2 + 8, 40, 100, 40, self.theme,
-            renderText(string.get(self.language), fontButtonPlay, TEXT[self.theme]), function = self.showMistakes))
+            renderText(getText(self.language, 'game_mistakes'), fontButtonPlay, TEXT[self.theme]), function = self.showMistakes))
         
-        string = {'ENG': 'New', 'EST': 'Uus'}
         self.playingButtons.append(Button(gridPos[0]+gridSize - 100, 40, 100, 40, self.theme,
-            renderText(string.get(self.language), fontButtonPlay, TEXT[self.theme]), function = self.resetGame))
+            renderText(getText(self.language, 'game_new'), fontButtonPlay, TEXT[self.theme]), function = self.resetGame))
 
