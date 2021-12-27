@@ -1,5 +1,6 @@
 import pygame
 import os
+import time
 from database import *
 from languages import *
 
@@ -55,7 +56,13 @@ fontStatValue = pygame.font.SysFont('arial', 26) # button text in playing
 fontStat = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 22) # stat title
 fontSliderText = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 20) # text in slider
 
-# FUNCTIONS
+# GLOBAL FUNCTIONS
+def getTime(seconds):
+    if seconds >= 3600:
+        return time.strftime("%H:%M:%S", time.gmtime(seconds))
+    else:
+        return time.strftime("%M:%S", time.gmtime(seconds))
+
 def loadImage(folder, file_name):
     return pygame.image.load(os.path.join("./assets", folder, file_name)).convert_alpha()
 
@@ -66,11 +73,10 @@ def playSound(sound):
     sound.set_volume(optionsValues(1))
     sound.play()
     
-def musicControl(change_volume=False):
-    if not change_volume:
-        pygame.mixer.music.set_volume(optionsValues(0)/2)
-        pygame.mixer.music.load(os.path.join("./assets", "sounds", "music.mp3"))
-        pygame.mixer.music.play(-1)
+def musicStart():
+    pygame.mixer.music.set_volume(optionsValues(0)/2)
+    pygame.mixer.music.load(os.path.join("./assets", "sounds", "music.mp3"))
+    pygame.mixer.music.play(-1)
 
 def renderText(string, font, color):
     return font.render(str(string), True, color)

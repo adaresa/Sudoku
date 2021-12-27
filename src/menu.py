@@ -10,7 +10,7 @@ class Menu:
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_icon(loadImage('images', 'icon.png'))
         
-        musicControl()
+        musicStart()
         self.theme = theme
         self.language = language
         
@@ -43,6 +43,7 @@ class Menu:
                 self.options.options_events()
                 self.options.options_update()
                 self.options.options_draw()
+        closeDB()
         pygame.quit()
         sys.exit()
         
@@ -56,7 +57,7 @@ class Menu:
                     self.quitGame()
                                 
             if event.type == pygame.QUIT:
-                self.running = False
+                self.quitGame()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button in self.menuButtons:
@@ -109,7 +110,6 @@ class Menu:
         self.state = "main_menu"
         
     def quitGame(self):
-        closeDB()
         self.running = False
         
     def loadButtons(self):

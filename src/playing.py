@@ -49,13 +49,6 @@ class App:
             if event.type == pygame.QUIT:
                 self.quitGame()
 
-            if event.type == pygame.MOUSEMOTION:
-                hovered = self.mouseOnGrid()
-                if hovered:
-                    self.hovered = hovered
-                else:
-                    self.hovered = None
-
             if event.type == pygame.MOUSEBUTTONDOWN:
                 selected = self.mouseOnGrid()
                 if selected:
@@ -69,6 +62,11 @@ class App:
         self.mousePos = pygame.mouse.get_pos()
         for button in self.playingButtons:
             button.update(self.mousePos)
+        hovered = self.mouseOnGrid()
+        if hovered:
+            self.hovered = hovered
+        else:
+            self.hovered = None
         
     def playing_draw(self):
         self.window.fill(BG[self.theme])
@@ -100,7 +98,7 @@ class App:
 
 ###### HELPER FUNCTIONS ######
     def drawTime(self):
-        drawText(time.strftime("%M:%S", time.gmtime(self.timer)), CENTER+(3*cellSize), 568, fontStatValue, TEXT[self.theme], self.window)
+        drawText(getTime(self.timer), CENTER+(3*cellSize), 568, fontStatValue, TEXT[self.theme], self.window)
         pygame.draw.line(self.window, OUTLINES_TIMER[self.theme], (gridPos[0] + (
                     6 * cellSize), gridPos[1]+gridSize), (gridPos[0] + (6 * cellSize), gridPos[1]+gridSize + 35), 3)
         pygame.draw.line(self.window, OUTLINES_TIMER[self.theme], (gridPos[0] + (
