@@ -6,11 +6,13 @@ class App:
     def __init__(self, theme, language, launchMenu, quitGame, loadingScreen):
         pygame.init()
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.clock = pygame.time.Clock()
         
         self.theme = theme
         self.language = language
         self.counterStart = None
         self.timer = 0
+        self.timerClick = 0
         self.saveWin = True
         
         self.grid = Board()
@@ -25,6 +27,8 @@ class App:
         self.mousePos = None # (x, y) for mouse coordinates
         self.selected = None # player selected grid (clicked)
         self.hovered = None # player hovered grid (holding mouse over)
+        self.doubled = None # player doubleclicked grid
+        self.doubled_space = None # make sure player doubleclicks same spot
         
         self.launchMenu = launchMenu
         self.quitGame = quitGame
@@ -50,15 +54,23 @@ class App:
                 self.quitGame()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
+                self.doubled = None
                 selected = self.mouseOnGrid()
                 if selected:
                     self.selected = selected
+                    if self.timerClick == 0:
+                        self.timerClick = 0.001
+                        self.doubled_space = self.selected
+                    elif self.timerClick <= 0.5:
+                        if self.selected == self.doubled_space:
+                            self.doubled = True
                 else:
                     for button in self.playingButtons:
                             button.activate(self.mousePos)
                     self.selected = None
                     
     def playing_update(self):
+        self.click_timer_update()
         self.mousePos = pygame.mouse.get_pos()
         for button in self.playingButtons:
             button.update(self.mousePos)
@@ -79,6 +91,9 @@ class App:
             self.drawSelection(self.window, self.hovered, 1)
         if self.selected:
             self.drawSelection(self.window, self.selected, 2)
+            if self.doubled:
+                self.double_click_highlight(self.gridScreen[self.selected[1]][self.selected[0]])
+                self.doubled_space = None
         self.drawGrid(self.window)
         self.drawNumbers()
         self.drawInfo()
@@ -94,9 +109,38 @@ class App:
             if elapsed >= 1:
                 self.timer += 1
                 self.counterStart = None
+                
+    def click_timer_update(self):
+        dt = self.clock.tick(30) / 1000
+        if self.timerClick != 0:
+            self.timerClick += dt
+            if self.timerClick >= 0.5:
+                self.timerClick = 0
             
 
 ###### HELPER FUNCTIONS ######
+    def double_click_highlight(self, num):
+        draw_x = set()
+        draw_y = set()
+        if num > 0:
+            for x in range(9):
+                for y in range(9):                    
+                    if self.gridScreen[y][x] == num:
+                        draw_x.add(x)
+                        draw_y.add(y)
+        for x in draw_x:
+            for y in range(9):
+                if self.gridScreen[y][x] == num:
+                    self.drawSelection(self.window, (x, y), 2)
+                else:
+                    self.drawSelection(self.window, (x, y), 3)
+        for y in draw_y:
+            for x in range(9):
+                if self.gridScreen[y][x] == num:
+                    self.drawSelection(self.window, (x, y), 2)
+                else:
+                    self.drawSelection(self.window, (x, y), 3)
+
     # draw self.saveWin, self.difficulty, self.timer under board
     def drawInfo(self):
         # 4 vertical lines
@@ -163,7 +207,10 @@ class App:
 
     # Colors selected and hovered grid
     def drawSelection(self, window, pos, color):
-        if color == 2:
+        if color == 3: # TODO change this for doubleclick rows
+            pygame.draw.rect(window, DOUBLED[self.theme], ((
+                pos[0] * cellSize) + gridPos[0], (pos[1] * cellSize) + gridPos[1], cellSize, cellSize))
+        elif color == 2:
             pygame.draw.rect(window, SELECTED[self.theme], ((
                 pos[0] * cellSize) + gridPos[0], (pos[1] * cellSize) + gridPos[1], cellSize, cellSize))
         elif color == 1:
@@ -215,7 +262,8 @@ class App:
         self.mistakeCellsIndex = 0
     
     def drawMistakes(self, window):
-        if self.mistakeCellsIndex < 1000:
+        dt = self.clock.tick(30) / 1000
+        if self.mistakeCellsIndex < 2:
             for cell in self.mistakeCells:
                 pygame.draw.rect(window, MISTAKES[self.theme], ((
                     cell[1] * cellSize) + gridPos[0], (cell[0] * cellSize) + gridPos[1], cellSize, cellSize))
@@ -225,7 +273,7 @@ class App:
                         cell[1] * cellSize) + gridPos[0], (cell[0] * cellSize) + gridPos[1], cellSize, cellSize))
             self.mistakeCells = []
             self.mistakeCellsIndex = 0
-        self.mistakeCellsIndex += 1
+        self.mistakeCellsIndex += dt
 
     # Draw the gridlines
     def drawGrid(self, window):

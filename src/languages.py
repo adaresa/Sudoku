@@ -1,7 +1,7 @@
 texts = {
     # CASE:                     ENGLISH, ESTONIAN
     # global
-    'loading':                  ["LOADING", "LAADIMINE"],
+    'loading':                  ["LOADING ...", "LAADIMINE ..."],
     'back_button':              ["BACK", "TAGASI"],
     'back_button_lower':        ["Back", "Tagasi"],
     
@@ -9,8 +9,8 @@ texts = {
     'game_solve':               ["Solve cell", "Lahenda"],
     'game_mistakes':            ["Mistakes", "Vead"],
     'game_new':                 ["New", "Uus"],
-    'game_savable_yes':        ["Savable", "Salvestatakse"],
-    'game_savable_no':         ["Not savable", "Ei salvestata"],
+    'game_savable_yes':         ["Savable", "Salvestatakse"],
+    'game_savable_no':          ["Not savable", "Ei salvestata"],
 
     # main menu
     'menu_main_1':              ["PLAY GAME", "MÄNGI"],
