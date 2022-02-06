@@ -11,6 +11,7 @@ texts = {
     'game_new':                 ["New", "Uus"],
     'game_savable_yes':         ["Savable", "Salvestatakse"],
     'game_savable_no':          ["Not savable", "Ei salvestata"],
+    'game_all_nine':            ["Done", "Tehtud"],
 
     # main menu
     'menu_main_1':              ["PLAY GAME", "MÄNGI"],

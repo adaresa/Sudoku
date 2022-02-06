@@ -1,4 +1,5 @@
 import time
+import collections
 from buttonClass import *
 from boardClass import *
 
@@ -97,6 +98,7 @@ class App:
         self.drawGrid(self.window)
         self.drawNumbers()
         self.drawInfo()
+        self.showCompleted(self.getFrequency())
         
         self.winCheck(self.window)
         pygame.display.update()
@@ -119,6 +121,39 @@ class App:
             
 
 ###### HELPER FUNCTIONS ######
+    '''
+    draw next to board of which numbers player has 9 or more of
+    input: dict of {num: frequency}
+    '''
+    def showCompleted(self, total):
+        od = collections.OrderedDict(sorted(total.items()))
+        header = False
+        x, y = gridPos[0] - 38, gridPos[1] + 8
+        for key, val in od.items():
+            if val >= 9:
+                if not header:
+                   txt = [getText(self.language, 'game_all_nine'), SAVABLE[0]]
+                   drawText(txt[0], x, y, fontButtonPlay, txt[1], self.window)
+                   header = True
+                   y += 30
+                drawText(str(key), x, y, fontButtonPlay, txt[1], self.window)
+                y += 30
+                
+    '''
+    return dict of number frequencies
+    output: dict of {num: frequency}
+    '''
+    def getFrequency(self):
+        total = {}
+        for lst in self.gridScreen:
+            for num in lst:
+                if num != 0:
+                    if num not in total:
+                        total[num] = 1
+                    else:
+                        total[num] += 1
+        return(total)
+
     def double_click_highlight(self, num):
         draw_x = set()
         draw_y = set()
