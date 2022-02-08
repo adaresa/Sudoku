@@ -56,6 +56,7 @@ gridSize = cellSize * 9
 # FONTS
 fontTitle = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 70) # title text
 fontCell = pygame.font.SysFont('arial', 50) # cell numbers
+fontSmallCell = pygame.font.SysFont('arial', 17) # small cell numbers
 fontButton = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 40) # buttons text
 fontButtonPlay = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 26) # button text in playing
 fontStatValue = pygame.font.SysFont('arial', 26) # button text in playing

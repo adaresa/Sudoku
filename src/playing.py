@@ -20,6 +20,7 @@ class App:
         self.difficulty = 0
         self.gridScreen, self.gridResult = self.grid.generateQuestionBoardCode(self.difficulty) # 0-2 difficulty
         self.gridOriginal = copy.deepcopy(self.gridScreen) # original grid to track which values are generated or player inserted
+        self.gridSmall = [[[0] for m in range(9)] for n in range(9)] # to track small numbers in a cell
         
         self.solvedCells = []
         self.mistakeCells = []
@@ -46,7 +47,19 @@ class App:
                 if 0 <= event.key - 48 <= 9: # 0-9
                     if self.selected:
                         number = event.key - 48
+                        # if pressed number is in a replacable cell
                         if self.gridOriginal[self.selected[1]][self.selected[0]] == 0:
+                            # if pressed number is already in that cell
+                            if number == self.gridScreen[self.selected[1]][self.selected[0]]:
+                                # if pressed 0 on empty cell, clear all small numbers
+                                if number == 0:
+                                    self.changeSmallNumber(self.selected, number, 'clear')
+                                else:
+                                    # add small number to cell, clear big number
+                                    self.changeSmallNumber(self.selected, number, 'add')
+                                    self.changeNumber(self.selected, 0)
+                                    continue
+                            # set big number to pressed number
                             self.changeNumber(self.selected, number)
                 elif event.key == 27: # esc
                     self.goToMenu()
@@ -97,6 +110,7 @@ class App:
                 self.doubled_space = None
         self.drawGrid(self.window)
         self.drawNumbers()
+        self.drawSmallNumbers()
         self.drawInfo()
         self.showCompleted(self.getFrequency())
         
@@ -121,14 +135,66 @@ class App:
             
 
 ###### HELPER FUNCTIONS ######
-    '''
-    draw next to board of which numbers player has 9 or more of
-    input: dict of {num: frequency}
-    '''
+    def changeSmallNumber(self, pos, number, action):
+        '''
+        add/clear small numbers in a cell
+        '''
+        if action == 'add':
+            # if 0, set first value
+            if self.gridSmall[pos[1]][pos[0]] == [0]:
+                self.gridSmall[pos[1]][pos[0]] = [number]
+            else:
+                # add new value if less than 3 values, value not already in cell
+                if len(self.gridSmall[pos[1]][pos[0]]) < 3 and number not in self.gridSmall[pos[1]][pos[0]]:
+                    self.gridSmall[pos[1]][pos[0]].append(number)
+        elif action == 'clear':
+            # clear all values, set back 0
+            self.gridSmall[pos[1]][pos[0]] = [0]
+                
+    def drawSmallNumbers(self):
+        '''
+        draw small numbers in a cell
+        '''
+        for x in range(9):
+            for y in range(9):
+                if 0 not in self.gridSmall[y][x]:
+                    height = 0
+                    for num in self.gridSmall[y][x]:
+                        self.text = fontSmallCell.render(str(num), True, TEXT[self.theme]) # (text, antialias, color)
+                        self.window.blit(self.text, (39 + gridPos[0] + (x * cellSize), 
+                                                gridPos[1] + height + (y * cellSize))) # (text, (x,y))
+                        height += 15
+
+    def changeNumber(self, pos, number):
+        playSound(INPUT_SOUND)
+        self.gridScreen[pos[1]][pos[0]] = number
+        
+    def drawNumbers(self):
+        '''
+        Draw numbers on all grids 
+        '''
+        for x in range(9):
+            for y in range(9):
+                if self.gridScreen[y][x] != 0:
+                    # text style for generated number
+                    if self.gridOriginal[y][x] != 0:
+                        self.text = fontCell.render(str(self.gridScreen[y][x]), True, TEXT[self.theme]) # (text, antialias, color)
+                        
+                    # text style for user inserted number
+                    else:
+                        self.text = fontCell.render(str(self.gridScreen[y][x]), True, INSERT_NUMBER[self.theme]) # (text, antialias, color)
+                        
+                    self.window.blit(self.text, (13 + gridPos[0] + (x * cellSize), 
+                                                gridPos[1] - 3 + (y * cellSize))) # (text, (x,y))
+
     def showCompleted(self, total):
+        '''
+        draw next to board of which numbers player has 9 or more of
+        input: dict of {num: frequency}
+        '''
         od = collections.OrderedDict(sorted(total.items()))
         header = False
-        x, y = gridPos[0] - 38, gridPos[1] + 8
+        x, y = gridPos[0] // 2, gridPos[1] + 8
         for key, val in od.items():
             if val >= 9:
                 if not header:
@@ -139,11 +205,11 @@ class App:
                 drawText(str(key), x, y, fontButtonPlay, txt[1], self.window)
                 y += 30
                 
-    '''
-    return dict of number frequencies
-    output: dict of {num: frequency}
-    '''
     def getFrequency(self):
+        '''
+        return dict of number frequencies
+        output: dict of {num: frequency}
+        '''
         total = {}
         for lst in self.gridScreen:
             for num in lst:
@@ -176,8 +242,13 @@ class App:
                 else:
                     self.drawSelection(self.window, (x, y), 3)
 
-    # draw self.saveWin, self.difficulty, self.timer under board
     def drawInfo(self):
+        '''
+        draw self.saveWin, 
+        self.difficulty, 
+        self.timer 
+        under board
+        '''
         # 4 vertical lines
         pygame.draw.line(self.window, OUTLINES_TIMER[self.theme], (gridPos[0] + (
                     0 * cellSize), gridPos[1]+gridSize), (gridPos[0] + (0 * cellSize), gridPos[1]+gridSize + 35), 3)
@@ -231,6 +302,7 @@ class App:
         self.gridScreen, self.gridResult = self.grid.generateQuestionBoardCode(self.difficulty) # 0-2 difficulty
         self.gridOriginal = copy.deepcopy(self.gridScreen) # original grid to track which values are generated or player inserted
         self.solvedCells = []
+        self.gridSmall = [[[0] for m in range(9)] for n in range(9)]
         self.selected = None
         self.saveWin = True
         self.timer = 0
@@ -240,8 +312,10 @@ class App:
         self.difficulty = difficulty
         self.resetGame()
 
-    # Colors selected and hovered grid
     def drawSelection(self, window, pos, color):
+        '''
+        Colors selected and hovered grid
+        '''
         if color == 3: # TODO change this for doubleclick rows
             pygame.draw.rect(window, DOUBLED[self.theme], ((
                 pos[0] * cellSize) + gridPos[0], (pos[1] * cellSize) + gridPos[1], cellSize, cellSize))
@@ -251,26 +325,6 @@ class App:
         elif color == 1:
             pygame.draw.rect(window, HOVERED[self.theme], ((
                 pos[0] * cellSize) + gridPos[0], (pos[1] * cellSize) + gridPos[1], cellSize, cellSize))
-    
-    # Draw numbers on all grids 
-    def drawNumbers(self):
-        for x in range(9):
-            for y in range(9):
-                if self.gridScreen[y][x] != 0:
-                    # text style for generated number
-                    if self.gridOriginal[y][x] != 0:
-                        self.text = fontCell.render(str(self.gridScreen[y][x]), True, TEXT[self.theme]) # (text, antialias, color)
-                        
-                    # text style for user inserted number
-                    else:
-                        self.text = fontCell.render(str(self.gridScreen[y][x]), True, INSERT_NUMBER[self.theme]) # (text, antialias, color)
-                        
-                    self.window.blit(self.text, (13 + gridPos[0] + (x * cellSize), 
-                                                gridPos[1] - 3 + (y * cellSize))) # (text, (x,y))
-                    
-    def changeNumber(self, pos, number):
-        playSound(INPUT_SOUND)
-        self.gridScreen[pos[1]][pos[0]] = number
         
     def solveCell(self):
         if self.selected:
