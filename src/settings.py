@@ -60,6 +60,8 @@ fontSmallCell = pygame.font.SysFont('arial', 17) # small cell numbers
 fontButton = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 40) # buttons text
 fontButtonPlay = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 26) # button text in playing
 fontStatValue = pygame.font.SysFont('arial', 26) # button text in playing
+fontTrophyTitle = pygame.font.SysFont('arial', 20) # name of trophy
+fontTrophyDescription = pygame.font.SysFont('arial', 16) # description of trophy
 fontStat = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 22) # stat title
 fontSliderText = pygame.font.Font('./assets/fonts/maldini/MaldiniNormal2.ttf', 20) # text in slider
 
