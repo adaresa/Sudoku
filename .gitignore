@@ -4,3 +4,4 @@
 *.bak
 *.dat
 .vscode/launch.json
+ignore/
