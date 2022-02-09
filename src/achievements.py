@@ -24,6 +24,7 @@ class Achievements:
         
         self.trophy = loadImage('images', 'trophy.png')
         self.trophy = pygame.transform.smoothscale(self.trophy, (50, 50))
+        self.trophyBackup = self.trophy
         
         self.loadButtons() 
         
@@ -153,6 +154,11 @@ class Achievements:
         for page, info in trophies.items():
             if page == self.pageTrophies:
                 for combo in info:
+                    if combo[0] == 'GIGACHAD':
+                        self.trophy = loadImage('images', 'gigachad.png')
+                        self.trophy = pygame.transform.smoothscale(self.trophy, (50, 50))
+                    else:
+                        self.trophy = self.trophyBackup
                     # trophy box
                     pygame.draw.rect(self.window, OUTLINES[self.theme], pygame.Rect(CENTER-125, height, 250, 50), 2, 4)
                     # trophy icon box

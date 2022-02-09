@@ -7,6 +7,7 @@ from achievements import *
 class Menu:
     def __init__(self, theme, language):
         pygame.init()
+        musicStart()
         pygame.display.set_caption('Simple Sudoku')
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_icon(loadImage('images', 'icon.png'))
@@ -14,7 +15,6 @@ class Menu:
         self.github = pygame.transform.smoothscale(self.github, (30, 30))
         self.github = colorize(self.github, TEXT[theme])
         
-        musicStart()
         self.theme = theme
         self.language = language
         
