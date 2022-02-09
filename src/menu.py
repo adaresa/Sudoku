@@ -1,4 +1,5 @@
 import sys
+import webbrowser
 from playing import *
 from options import *
 from achievements import *
@@ -6,11 +7,14 @@ from achievements import *
 class Menu:
     def __init__(self, theme, language):
         pygame.init()
+        musicStart()
         pygame.display.set_caption('Simple Sudoku')
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_icon(loadImage('images', 'icon.png'))
+        self.github = loadImage('images', 'github-logo-w.png')
+        self.github = pygame.transform.smoothscale(self.github, (30, 30))
+        self.github = colorize(self.github, TEXT[theme])
         
-        musicControl()
         self.theme = theme
         self.language = language
         
@@ -43,6 +47,7 @@ class Menu:
                 self.options.options_events()
                 self.options.options_update()
                 self.options.options_draw()
+        closeDB()
         pygame.quit()
         sys.exit()
         
@@ -56,11 +61,24 @@ class Menu:
                     self.quitGame()
                                 
             if event.type == pygame.QUIT:
-                self.running = False
+                self.quitGame()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button in self.menuButtons:
                     button.activate(self.mousePos)
+                    
+                if 452 <= self.mousePos[0] <= 485:
+                    if 142 <= self.mousePos[1] <= 175:
+                        webbrowser.open('https://github.com/adaresa/Sudoku')
+            
+            if event.type == pygame.MOUSEMOTION:
+                self.mousePos = pygame.mouse.get_pos()
+                if 452 <= self.mousePos[0] <= 485 and 142 <= self.mousePos[1] <= 175:
+                    pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
+                else:
+                    pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
+                    
+                
 
     def menu_update(self):
         self.mousePos = pygame.mouse.get_pos()
@@ -79,6 +97,8 @@ class Menu:
     def titleText(self):
         # title text
         drawText("Simple Sudoku", CENTER, 100, fontTitle, TEXT[self.theme], self.window)
+        # github logo under title
+        self.window.blit(self.github, (454, 145))
     
     def loadingScreen(self):
         self.window.fill(BG[self.theme])
@@ -109,7 +129,6 @@ class Menu:
         self.state = "main_menu"
         
     def quitGame(self):
-        closeDB()
         self.running = False
         
     def loadButtons(self):
